@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login - Tradovate</title>
+    <style>
+         :root {
+            --main-color: #00ffb7;
+            --bg-dark: #0e0e0e;
+            --bg-light: #f4f4f4;
+            --text-dark: #121212;
+            --text-light: #ffffff;
+        }
+        
+        html,
+        body {
+            max-width: 100%;
+            overflow-x: hidden;
+        }
+        
+        * {
+            box-sizing: border-box;
+        }
+        
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            overflow: hidden;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+        
+        .crypto-background {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 0;
+            overflow: hidden;
+        }
+        
+        .coin {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            background: radial-gradient(circle, #00ffb7, #009e85);
+            border-radius: 50%;
+            animation: float 6s infinite ease-in-out;
+            opacity: 0.15;
+        }
+        
+        .coin:nth-child(1) {
+            top: 10%;
+            left: 15%;
+            animation-delay: 0s;
+        }
+        
+        .coin:nth-child(2) {
+            top: 70%;
+            left: 65%;
+            animation-delay: 1s;
+        }
+        
+        .coin:nth-child(3) {
+            top: 45%;
+            left: 25%;
+            animation-delay: 2s;
+        }
+        
+        @keyframes float {
+            0% {
+                transform: translateY(0) rotate(0deg);
+            }
+            50% {
+                transform: translateY(-20px) rotate(180deg);
+            }
+            100% {
+                transform: translateY(0) rotate(360deg);
+            }
+        }
+        
+        .logo {
+            position: absolute;
+            top: 30px;
+            width: 100%;
+            text-align: center;
+            z-index: 3;
+        }
+        
+        .logo h1 {
+            font-size: 32px;
+            color: var(--main-color);
+            text-shadow: 0 0 20px var(--main-color), 0 0 40px var(--main-color);
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            50% {
+                transform: scale(1.1);
+                opacity: 0.9;
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+        
+        .container {
+            background: rgba(0, 0, 0, 0.6);
+            border: 2px solid var(--main-color);
+            border-radius: 20px;
+            padding: 40px 30px;
+            box-shadow: 0 0 25px var(--main-color);
+            width: 90%;
+            max-width: 400px;
+            backdrop-filter: blur(10px);
+            position: relative;
+            z-index: 2;
+            animation: crypto-glow 10s infinite alternate ease-in-out;
+        }
+        
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: var(--main-color);
+            font-size: 28px;
+            text-shadow: 0 0 10px var(--main-color);
+        }
+        
+        input[type="email"],
+        input[type="password"] {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 20px;
+            border: none;
+            border-radius: 10px;
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white;
+            outline: none;
+            font-size: 16px;
+            animation: field-pop 1s ease;
+        }
+        
+        button[type="submit"] {
+            width: 100%;
+            padding: 12px;
+            background-color: var(--main-color);
+            color: black;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        
+        button[type="submit"]:hover {
+            background-color: #00e6a8;
+        }
+        
+        .toggle {
+            position: fixed;
+            bottom: 70px;
+            right: 15px;
+            background-color: var(--main-color);
+            border: none;
+            padding: 10px;
+            border-radius: 50%;
+            cursor: pointer;
+            z-index: 3;
+            box-shadow: 0 0 10px var(--main-color);
+        }
+        
+        @keyframes crypto-glow {
+            0% {
+                box-shadow: 0 0 25px var(--main-color);
+            }
+            100% {
+                box-shadow: 0 0 60px var(--main-color);
+            }
+        }
+        
+        @keyframes field-pop {
+            0% {
+                transform: scale(0.9);
+                opacity: 0;
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+        
+        .light-mode {
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+        }
+        
+        .light-mode .container {
+            background: rgba(255, 255, 255, 0.85);
+            color: var(--text-dark);
+            box-shadow: 0 0 20px #ccc;
+        }
+        
+        .light-mode input,
+        .light-mode button[type="submit"] {
+            color: var(--text-dark);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="crypto-background">
+        <div class="coin"></div>
+        <div class="coin"></div>
+        <div class="coin"></div>
+    </div>
+
+    <div class="logo">
+        <h1>Tradovate</h1>
+    </div>
+
+    <button class="toggle" onclick="toggleMode()">☀️</button>
+
+    <div class="container">
+        <h2>Welcome Back</h2>
+        <form id="loginForm">
+            <input type="email" placeholder="Email Address" required />
+            <input type="password" placeholder="Password" required />
+            <button type="submit">Login</a></button>
+        </form>
+    </div>
+
+    <script>
+        function toggleMode() {
+            document.body.classList.toggle("light-mode");
+        }
+
+        document.getElementById("loginForm").onsubmit = function(e) {
+            e.preventDefault(); // Prevents page reload (for demo)
+
+            // Add validation logic here (e.g., check email/password)
+            const email = document.querySelector("input[type='email']").value;
+            const password = document.querySelector("input[type='password']").value;
+
+            if (email && password) {
+                window.location.href = "index.html"; // Redirect if valid
+            } else {
+                alert("Please fill in all fields!");
+            }
+        };
+    </script>
+</body>
+
+</html>

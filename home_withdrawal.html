@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Tradovate - Withdraw</title>
+    <style>
+         :root {
+            --main-color: #00ffb7;
+            --bg-dark: #0e0e0e;
+            --bg-footer: #1e1e1e;
+            --primary-blue: #0066ff;
+        }
+        
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-dark);
+            color: white;
+            padding-bottom: 70px;
+        }
+        
+        header {
+            background-color: #1e1e1e;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--main-color);
+        }
+        
+        .language-icon {
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+        }
+        /* Bottom Navigation - Same as index.html */
+        
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: var(--bg-footer);
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            height: 60px;
+            border-top: 1px solid #333;
+            z-index: 999;
+        }
+        
+        .bottom-nav button {
+            background: none;
+            border: none;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-size: 10px;
+            cursor: pointer;
+        }
+        
+        .bottom-nav img {
+            width: 24px;
+            height: 24px;
+            object-fit: contain;
+            margin-bottom: 2px;
+        }
+        /* Theme Toggle - Same as index.html */
+        
+        .theme-toggle {
+            position: fixed;
+            bottom: 75px;
+            right: 15px;
+            background-color: var(--main-color);
+            color: #000;
+            border: none;
+            padding: 10px 14px;
+            font-size: 12px;
+            border-radius: 30px;
+            cursor: pointer;
+            z-index: 9999;
+            box-shadow: 0 2px 10px rgba(0, 255, 183, 0.5);
+            transition: background 0.3s;
+        }
+        /* Withdraw Page Specific Styles */
+        
+        .page-header {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            border-bottom: 1px solid #333;
+        }
+        
+        .back-button {
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .page-title {
+            flex: 1;
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        
+        .form-section {
+            padding: 15px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 14px;
+            color: #aaa;
+        }
+        
+        .currency-selector {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 15px;
+            background: #1e1e1e;
+            border-radius: 8px;
+            border: 1px solid #333;
+            cursor: pointer;
+        }
+        
+        .currency-display {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .currency-icon {
+            width: 24px;
+            height: 24px;
+        }
+        
+        .dropdown-icon {
+            width: 16px;
+            height: 16px;
+            opacity: 0.7;
+        }
+        
+        .address-input {
+            width: 100%;
+            padding: 12px 15px;
+            background: #1e1e1e;
+            border: 1px solid #333;
+            border-radius: 8px;
+            color: white;
+            font-size: 14px;
+        }
+        
+        .amount-input-container {
+            position: relative;
+        }
+        
+        .amount-input {
+            width: 100%;
+            padding: 12px 15px;
+            background: #1e1e1e;
+            border: 1px solid #333;
+            border-radius: 8px;
+            color: white;
+            font-size: 16px;
+            padding-right: 80px;
+        }
+        
+        .amount-actions {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            color: var(--main-color);
+            font-size: 14px;
+        }
+        
+        .all-button {
+            background: none;
+            border: none;
+            color: var(--main-color);
+            cursor: pointer;
+        }
+        
+        .balance-info {
+            font-size: 12px;
+            color: #aaa;
+            margin-top: 5px;
+        }
+        
+        .fee-display,
+        .arrival-display {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #333;
+        }
+        
+        .fee-value,
+        .arrival-value {
+            color: #aaa;
+        }
+        
+        .withdraw-button {
+            width: 100%;
+            padding: 15px;
+            background: var(--primary-blue);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            margin-top: 30px;
+            cursor: pointer;
+        }
+        /* Currency Dropdown */
+        
+        .currency-dropdown {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--bg-dark);
+            z-index: 1001;
+            border-radius: 15px 15px 0 0;
+            padding: 15px;
+            transform: translateY(100%);
+            transition: transform 0.3s ease;
+            max-height: 60vh;
+            overflow-y: auto;
+            box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .currency-dropdown.open {
+            transform: translateY(0);
+        }
+        
+        .dropdown-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #333;
+        }
+        
+        .dropdown-title {
+            font-weight: bold;
+        }
+        
+        .close-dropdown {
+            background: none;
+            border: none;
+            color: var(--main-color);
+            font-size: 16px;
+            cursor: pointer;
+        }
+        
+        .currency-option {
+            display: flex;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #333;
+            cursor: pointer;
+        }
+        
+        .currency-option:last-child {
+            border-bottom: none;
+        }
+        
+        .currency-option-icon {
+            width: 30px;
+            height: 30px;
+            margin-right: 15px;
+        }
+        
+        .currency-option-name {
+            font-weight: 500;
+        }
+        /* Overlay */
+        
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            display: none;
+        }
+        
+        .overlay.active {
+            display: block;
+        }
+        /* Light Mode Styles */
+        
+        body.light-mode {
+            background-color: #f4f4f4;
+            color: #000;
+        }
+        
+        body.light-mode header,
+        body.light-mode .bottom-nav,
+        body.light-mode .currency-selector,
+        body.light-mode .address-input,
+        body.light-mode .amount-input,
+        body.light-mode .currency-dropdown {
+            background-color: #ffffff !important;
+            color: #111111 !important;
+        }
+        
+        body.light-mode .form-label,
+        body.light-mode .balance-info,
+        body.light-mode .fee-value,
+        body.light-mode .arrival-value {
+            color: #666;
+        }
+        
+        body.light-mode .currency-selector,
+        body.light-mode .address-input,
+        body.light-mode .amount-input {
+            border: 1px solid #ddd;
+        }
+        
+        body.light-mode .fee-display,
+        body.light-mode .arrival-display,
+        body.light-mode .currency-option {
+            border-bottom: 1px solid #eee;
+        }
+        
+        body.light-mode .dropdown-header {
+            border-bottom: 1px solid #eee;
+        }
+        
+        html,
+        body {
+            max-width: 100%;
+            overflow-x: hidden;
+        }
+        
+        * {
+            box-sizing: border-box;
+        }
+        
+        @media (max-width: 600px) {
+            .form-section,
+            .page-header {
+                padding: 10px;
+            }
+            .currency-selector,
+            .address-input,
+            .amount-input {
+                font-size: 14px;
+            }
+        }
+        
+        .address-input,
+        .amount-input {
+            word-wrap: break-word;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="logo"><img src="/assets/icons/logo.png" width="30px" alt=""></div>
+        <a href="language.html"><img src="/assets/icons/worlwide.png" class="language-icon" alt="Language"></a>
+    </header>
+
+    <div class="page-header">
+        <button class="back-button" onclick="window.history.back()">
+            <img src="/assets/icons/previous.png" width="24" alt="Back">
+        </button>
+        <div class="page-title">Withdraw</div>
+        <div style="width: 24px;"></div>
+        <!-- Spacer for alignment -->
+    </div>
+
+    <div class="form-section">
+        <div class="form-group">
+            <label class="form-label">Withdrawal currency</label>
+            <div class="currency-selector" id="currencySelector">
+                <div class="currency-display">
+                    <img src="/assets/icons/usdt.png" class="currency-icon" alt="USDT">
+                    <span>USDT</span>
+                </div>
+                <img src="/assets/icons/arrow.png" class="dropdown-icon" alt="▼">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="form-label">Withdrawal address</label>
+            <input type="text" class="address-input" placeholder="Enter or long press paste address">
+        </div>
+
+        <div class="form-group">
+            <label class="form-label">Withdraw amount</label>
+            <div class="amount-input-container">
+                <input type="number" class="amount-input" placeholder="0.00">
+                <div class="amount-actions">
+                    <span>USDT</span>
+                    <span>|</span>
+                    <button class="all-button">All</button>
+                </div>
+            </div>
+            <div class="balance-info">Available 147.7166 USDT</div>
+        </div>
+
+        <div class="fee-display">
+            <span>Service Charge</span>
+            <span class="fee-value">0.000000 USDT</span>
+        </div>
+
+        <div class="arrival-display">
+            <span>Amount of arrived</span>
+            <span class="arrival-value">0.000000 USDT</span>
+        </div>
+
+        <button class="withdraw-button">Withdraw</button>
+    </div>
+
+    <!-- Currency Dropdown -->
+    <div class="overlay" id="overlay"></div>
+    <div class="currency-dropdown" id="currencyDropdown">
+        <div class="dropdown-header">
+            <div class="dropdown-title">Select Currency</div>
+            <button class="close-dropdown" id="closeDropdown">Close</button>
+        </div>
+        <div class="currency-option" data-currency="USDT">
+            <img src="/assets/icons/usdt.png" class="currency-option-icon" alt="USDT">
+            <div class="currency-option-name">USDT</div>
+        </div>
+        <div class="currency-option" data-currency="BTC">
+            <img src="/assets/icons/btc.png" class="currency-option-icon" alt="BTC">
+            <div class="currency-option-name">BTC</div>
+        </div>
+        <div class="currency-option" data-currency="ETH">
+            <img src="/assets/icons/eth.png" class="currency-option-icon" alt="ETH">
+            <div class="currency-option-name">ETH</div>
+        </div>
+        <div class="currency-option" data-currency="USDC">
+            <img src="/assets/icons/usdc.png" class="currency-option-icon" alt="USDC">
+            <div class="currency-option-name">USDC</div>
+        </div>
+    </div>
+
+    <div class="bottom-nav">
+        <button onclick="window.location.href='index.html'">
+            <img src="/assets/icons/home.png" alt="Home">
+            Home
+        </button>
+        <button onclick="window.location.href='market.html'">
+            <img src="/assets/icons/bull-market.png" alt="Market">
+            Market
+        </button>
+        <button onclick="window.location.href='transactions.html'">
+            <img src="/assets/icons/invoice.png" alt="Transactions">
+            Transact
+        </button>
+        <button onclick="window.location.href='balance.html'">
+            <img src="/assets/icons/money.png" alt="Balance">
+            Balance
+        </button>
+        <button onclick="window.location.href='profile.html'">
+            <img src="/assets/icons/user.png" alt="Profile">
+            Profile
+        </button>
+    </div>
+
+    <button class="theme-toggle" onclick="toggleTheme()">🌓</button>
+
+    <script>
+        // Theme toggle
+        function toggleTheme() {
+            document.body.classList.toggle('light-mode');
+            localStorage.setItem('theme', document.body.classList.contains('light-mode') ? 'light' : 'dark');
+        }
+
+        // Auto-load theme on page load
+        (function() {
+            if (localStorage.getItem('theme') === 'light') {
+                document.body.classList.add('light-mode');
+            }
+        })();
+
+        // Currency dropdown functionality
+        const currencySelector = document.getElementById('currencySelector');
+        const currencyDropdown = document.getElementById('currencyDropdown');
+        const closeDropdown = document.getElementById('closeDropdown');
+        const overlay = document.getElementById('overlay');
+        const currencyOptions = document.querySelectorAll('.currency-option');
+        const currencyDisplay = document.querySelector('.currency-display span');
+        const currencyIcon = document.querySelector('.currency-icon');
+        const amountCurrency = document.querySelector('.amount-actions span:first-child');
+
+        currencySelector.addEventListener('click', () => {
+            currencyDropdown.classList.add('open');
+            overlay.classList.add('active');
+        });
+
+        closeDropdown.addEventListener('click', () => {
+            currencyDropdown.classList.remove('open');
+            overlay.classList.remove('active');
+        });
+
+        overlay.addEventListener('click', () => {
+            currencyDropdown.classList.remove('open');
+            overlay.classList.remove('active');
+        });
+
+        currencyOptions.forEach(option => {
+            option.addEventListener('click', () => {
+                const currency = option.getAttribute('data-currency');
+                currencyDisplay.textContent = currency;
+                amountCurrency.textContent = currency;
+
+                // Update icon - in a real app, you'd change the image source based on currency
+                currencyIcon.src = `/assets/icons/${currency.toLowerCase()}.png`;
+
+                currencyDropdown.classList.remove('open');
+                overlay.classList.remove('active');
+            });
+        });
+
+        // "All" button functionality
+        const allButton = document.querySelector('.all-button');
+        const amountInput = document.querySelector('.amount-input');
+
+        allButton.addEventListener('click', () => {
+            amountInput.value = '147.7166'; // In a real app, you'd get this from the balance
+        });
+
+        // Simple validation for the withdraw button
+        const withdrawButton = document.querySelector('.withdraw-button');
+        const addressInput = document.querySelector('.address-input');
+
+        function validateForm() {
+            if (addressInput.value.trim() && amountInput.value.trim()) {
+                withdrawButton.disabled = false;
+                withdrawButton.style.opacity = '1';
+            } else {
+                withdrawButton.disabled = true;
+                withdrawButton.style.opacity = '0.7';
+            }
+        }
+
+        addressInput.addEventListener('input', validateForm);
+        amountInput.addEventListener('input', validateForm);
+
+        // Initialize
+        validateForm();
+    </script>
+</body>
+
+</html>

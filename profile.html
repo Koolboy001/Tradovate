@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Profile - Tradovate</title>
+    <style>
+         :root {
+            --main-color: #00ffb7;
+            --bg-dark: #0e0e0e;
+            --bg-light: #f4f4f4;
+            --text-dark: #121212;
+            --text-light: #ffffff;
+            --bg-footer: #1a1a1a;
+        }
+        
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+        
+        header {
+            background-color: #1e1e1e;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--main-color);
+        }
+        
+        .language-icon {
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+        }
+        
+        .profile-section {
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid #333;
+        }
+        
+        .profile-logo {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: var(--main-color);
+            margin-right: 15px;
+        }
+        
+        .user-info {
+            flex: 1;
+        }
+        
+        .user-id {
+            font-weight: bold;
+            margin: 0;
+        }
+        
+        .credit {
+            font-size: 14px;
+            color: #999;
+        }
+        
+        .link-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .link-item {
+            display: flex;
+            align-items: center;
+            padding: 15px 20px;
+            border-bottom: 1px solid #333;
+            cursor: pointer;
+        }
+        
+        .link-item img {
+            width: 20px;
+            height: 20px;
+            margin-right: 15px;
+        }
+        
+        .link-text {
+            font-size: 16px;
+        }
+        
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: var(--bg-footer);
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            height: 60px;
+            border-top: 1px solid #333;
+            z-index: 999;
+        }
+        
+        .bottom-nav button {
+            background: none;
+            border: none;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-size: 10px;
+            cursor: pointer;
+        }
+        
+        .bottom-nav img {
+            width: 24px;
+            height: 24px;
+            object-fit: contain;
+            margin-bottom: 2px;
+        }
+        
+        .toggle {
+            position: fixed;
+            bottom: 70px;
+            right: 15px;
+            background-color: var(--main-color);
+            border: none;
+            padding: 10px;
+            border-radius: 50%;
+            cursor: pointer;
+            z-index: 1000;
+            box-shadow: 0 0 10px var(--main-color);
+        }
+        
+        .light-mode {
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+        }
+        
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+        
+        a:visited {
+            color: inherit;
+        }
+        /* Prevent horizontal scrolling and wiggling */
+        
+        html,
+        body {
+            overflow-x: hidden;
+            width: 100%;
+            position: relative;
+        }
+        /* Optional: Add subtle overscroll behavior for iOS */
+        
+        body {
+            overscroll-behavior-x: none;
+        }
+        /* Ensure all elements stay within viewport */
+        
+        * {
+            max-width: 100%;
+            box-sizing: border-box;
+        }
+        /* Optional: Add this if you have any absolutely positioned elements */
+        
+        .container {
+            width: 100vw;
+            overflow: hidden;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="logo"><img src="/assets/icons/logo.png" width="30px" alt=""></div>
+        <a href="language.html"><img src="/assets/icons/worlwide.png" class="language-icon" alt="Language"></a>
+    </header>
+
+    <div class="profile-section">
+        <div class="profile-logo"></div>
+        <div class="user-info">
+            <p class="user-id">User ID: 123456</p>
+            <p class="credit">Credit Point: 78</p>
+        </div>
+    </div>
+
+    <ul class="link-list">
+        <li class="link-item"><img src="/assets/icons/primary.png"><span class="link-text">Primary Certification</span></li>
+        <li class="link-item"><img src="/assets/icons/two-factor-authentication.png"><span class="link-text">Advanced Authentication</span></li>
+        <a href="https://t.me/YourTelegramUsername">
+            <li class="link-item"><img src="/assets/icons/customer-support.png"><span class="link-text">Customer Support</span></li>
+        </a>
+        <a href="profile_order_record.html">
+            <li class="link-item"><img src="/assets/icons/document.png"><span class="link-text">Order Record</span></li>
+        </a>
+        <a href="profile_share.html">
+            <li class="link-item"><img src="/assets/icons/link.png"><span class="link-text">I Want to Share</span></li>
+        </a>
+        <a href="profile_agent_distribution.html">
+            <li class="link-item"><img src="/assets/icons/artificial-intelligence.png"><span class="link-text">Agent Distribution</span></li>
+        </a>
+        <a href="profile_help_center.html">
+            <li class="link-item"><img src="/assets/icons/customer-support (1).png"><span class="link-text">Help Center</span></li>
+        </a>
+        <a href="suggestion.html">
+            <li class="link-item"><img src="/assets/icons/suggestion.png"><span class="link-text">Suggestions</span></li>
+        </a>
+        <a href="home_download.html">
+            <li class="link-item"><img src="/assets/icons/download.png"><span class="link-text">Download App</span></li>
+        </a>
+        <a href="settings.html">
+            <li class="link-item"><img src="/assets/icons/gear.png"><span class="link-text">General Setting</span></li>
+        </a>
+    </ul>
+    <br><br><br><br><br>
+    <button class="toggle" onclick="toggleMode()">☀️</button>
+
+    <div class="bottom-nav">
+        <button onclick="window.location.href='index.html'">
+      <img src="/assets/icons/home.png" alt="Home">
+      Home
+    </button>
+        <button onclick="window.location.href='market.html'">
+      <img src="/assets/icons/bull-market.png" alt="Market">
+      Market
+    </button>
+        <button onclick="window.location.href='transactions.html'">
+      <img src="/assets/icons/invoice.png" alt="Transactions">
+      Transact
+    </button>
+        <button onclick="window.location.href='balance.html'">
+      <img src="/assets/icons/money.png" alt="Balance">
+      Balance
+    </button>
+        <button onclick="window.location.href='profile.html'">
+      <img src="/assets/icons/user.png" alt="Profile">
+      Profile
+    </button>
+    </div>
+
+    <script>
+        function toggleMode() {
+            document.body.classList.toggle('light-mode');
+        }
+    </script>
+</body>
+
+</html>

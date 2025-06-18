@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Balance - Tradovate</title>
+    <style>
+         :root {
+            --main-color: #00ffb7;
+            --bg-dark: #0e0e0e;
+            --bg-light: #f4f4f4;
+            --text-dark: #121212;
+            --text-light: #ffffff;
+            --bg-footer: #1c1c1c;
+            --card-bg: #1e1e1e;
+            --divider-color: #333;
+        }
+        
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            transition: background 0.3s ease, color 0.3s ease;
+            overflow-x: hidden;
+        }
+        
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            background-color: var(--bg-footer);
+            border-bottom: 1px solid var(--divider-color);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .logo {
+            font-size: 20px;
+            color: var(--main-color);
+            font-weight: bold;
+        }
+        
+        .language-icon {
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+        }
+        
+        h2 {
+            text-align: center;
+            color: var(--main-color);
+            margin: 15px 0;
+        }
+        
+        .total-assets {
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        .balance-display {
+            font-size: 24px;
+            font-weight: bold;
+        }
+        
+        .toggle-eye {
+            font-size: 18px;
+            background: none;
+            border: none;
+            color: var(--main-color);
+            cursor: pointer;
+        }
+        
+        .action-buttons {
+            display: flex;
+            justify-content: space-around;
+            margin: 20px;
+        }
+        
+        .action-buttons button {
+            background-color: var(--main-color);
+            border: none;
+            color: #000;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .action-buttons button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 255, 183, 0.3);
+        }
+        
+        .wallet-list {
+            margin: 0 15px 80px;
+        }
+        
+        .wallet-item {
+            padding: 15px;
+            border-bottom: 1px solid var(--divider-color);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .wallet-item:hover {
+            background-color: rgba(0, 255, 183, 0.05);
+        }
+        
+        .wallet-item h4 {
+            margin: 0 0 10px;
+            color: var(--main-color);
+        }
+        
+        .wallet-columns {
+            display: flex;
+            justify-content: space-between;
+            font-size: 14px;
+        }
+        
+        .wallet-columns span {
+            flex: 1;
+            text-align: center;
+        }
+        
+        .estimate {
+            color: var(--main-color);
+        }
+        /* Asset Records Modal */
+        
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 10000;
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        .modal-content {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: var(--card-bg);
+            border-radius: 10px;
+            width: 90%;
+            max-width: 500px;
+            max-height: 80vh;
+            overflow-y: auto;
+            z-index: 10001;
+            box-shadow: 0 0 20px rgba(0, 255, 183, 0.3);
+        }
+        
+        .modal-header {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            border-bottom: 1px solid var(--divider-color);
+            position: sticky;
+            top: 0;
+            background-color: var(--card-bg);
+            z-index: 1;
+        }
+        
+        .modal-back {
+            background: none;
+            border: none;
+            cursor: pointer;
+            margin-right: 15px;
+        }
+        
+        .modal-title {
+            flex: 1;
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            color: var(--text-light);
+        }
+        
+        .asset-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            border-bottom: 1px solid var(--divider-color);
+        }
+        
+        .asset-name {
+            font-size: 24px;
+            font-weight: bold;
+        }
+        
+        .asset-balance {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+        
+        .asset-usd {
+            font-size: 16px;
+            color: var(--main-color);
+        }
+        
+        .records-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .records-table th {
+            background-color: var(--bg-footer);
+            padding: 12px 15px;
+            text-align: left;
+            font-size: 14px;
+            color: var(--main-color);
+            position: sticky;
+            top: 60px;
+        }
+        
+        .records-table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid var(--divider-color);
+            font-size: 13px;
+        }
+        
+        .records-table tr:last-child td {
+            border-bottom: none;
+        }
+        
+        .negative {
+            color: #ff4d4d;
+        }
+        
+        .positive {
+            color: var(--main-color);
+        }
+        
+        .toggle-mode {
+            position: fixed;
+            bottom: 70px;
+            right: 15px;
+            background-color: var(--main-color);
+            border: none;
+            padding: 10px;
+            border-radius: 50%;
+            cursor: pointer;
+            z-index: 999;
+            box-shadow: 0 0 10px var(--main-color);
+            transition: all 0.3s;
+        }
+        
+        .toggle-mode:hover {
+            transform: scale(1.1);
+        }
+        
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: var(--bg-footer);
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            height: 60px;
+            border-top: 1px solid var(--divider-color);
+            z-index: 999;
+        }
+        
+        .bottom-nav button {
+            background: none;
+            border: none;
+            color: var(--text-light);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-size: 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .bottom-nav button:hover {
+            color: var(--main-color);
+            transform: translateY(-3px);
+        }
+        
+        .bottom-nav img {
+            width: 24px;
+            height: 24px;
+            object-fit: contain;
+            margin-bottom: 2px;
+            transition: all 0.2s;
+        }
+        
+        .bottom-nav button:hover img {
+            filter: brightness(0) saturate(100%) invert(73%) sepia(63%) saturate(999%) hue-rotate(110deg) brightness(101%) contrast(101%);
+        }
+        /* Light Mode Styles */
+        
+        body.light-mode {
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            --card-bg: #ffffff;
+            --divider-color: #ddd;
+            --text-secondary: #666;
+        }
+        
+        body.light-mode header,
+        body.light-mode .bottom-nav {
+            background-color: #ffffff !important;
+            border-color: #ddd !important;
+        }
+        
+        body.light-mode .wallet-item:hover {
+            background-color: rgba(0, 0, 0, 0.03);
+        }
+        
+        body.light-mode .records-table th {
+            background-color: #f5f5f5;
+        }
+        
+        body.light-mode .bottom-nav button {
+            color: var(--text-dark);
+        }
+        /* Animations */
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+        
+        @keyframes slideIn {
+            from {
+                transform: translate(-50%, -60%);
+                opacity: 0;
+            }
+            to {
+                transform: translate(-50%, -50%);
+                opacity: 1;
+            }
+        }
+        
+        .modal-content {
+            animation: slideIn 0.3s ease forwards;
+        }
+        
+        .wallet-item {
+            animation: fadeIn 0.3s ease forwards;
+        }
+        
+        .wallet-item:nth-child(1) {
+            animation-delay: 0.1s;
+        }
+        
+        .wallet-item:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+        
+        .wallet-item:nth-child(3) {
+            animation-delay: 0.3s;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="logo">Tradovate</div>
+        <h2>Balance</h2>
+        <a href="language.html"><img src="/assets/icons/worlwide.png" class="language-icon" alt="Language"></a>
+    </header>
+
+    <div class="total-assets">
+        <div class="balance-display" id="balance-display">$12,530.22</div>
+        <button class="toggle-eye" onclick="toggleBalance()">👁️</button>
+    </div>
+
+    <div class="action-buttons">
+        <a href="home_deposit.html"><button>Deposit</button></a>
+        <a href="home_withdrawal.html"><button>Withdraw</button></a>
+        <a href="exchange.html"><button>Exchange</button></a>
+    </div>
+
+    <div class="wallet-list" id="wallet-list"></div>
+
+    <!-- Asset Records Modal -->
+    <div class="modal-overlay" id="asset-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button class="modal-back" onclick="closeModal('asset-modal')">
+                    <img src="/assets/icons/previous.png" width="20" alt="Back">
+                </button>
+                <div class="modal-title">Asset records</div>
+                <button class="modal-close" onclick="closeModal('asset-modal')">&times;</button>
+            </div>
+
+            <div class="asset-header">
+                <div>
+                    <div class="asset-name" id="modal-asset-name">BTC</div>
+                    <div class="asset-balance">Available: <span id="modal-available">0.0031</span> | On hold: <span id="modal-onhold">0.0000</span></div>
+                </div>
+                <div class="asset-usd" id="modal-usd-estimate">≈ $200.45</div>
+            </div>
+
+            <table class="records-table">
+                <thead>
+                    <tr>
+                        <th>Quantity</th>
+                        <th>Balance</th>
+                        <th>Time <img src="/assets/icons/sort.png" width="12" alt="Sort"></th>
+                    </tr>
+                </thead>
+                <tbody id="asset-records-body">
+                    <tr>
+                        <td class="negative">-0.00310000</td>
+                        <td>0.0000</td>
+                        <td>2025-06-11 13:07:26</td>
+                    </tr>
+                    <tr>
+                        <td class="positive">0.00300235</td>
+                        <td>0.0031</td>
+                        <td>2025-02-22 15:32:39</td>
+                    </tr>
+                    <tr>
+                        <td class="negative">-0.00180000</td>
+                        <td>0.0000</td>
+                        <td>2025-02-21 14:39:44</td>
+                    </tr>
+                    <tr>
+                        <td class="positive">0.00180000</td>
+                        <td>0.0018</td>
+                        <td>2025-02-21 14:31:10</td>
+                    </tr>
+                    <tr>
+                        <td class="negative">-0.00180000</td>
+                        <td>0.0001</td>
+                        <td>2025-02-21 14:31:10</td>
+                    </tr>
+                    <tr>
+                        <td class="positive">0.00191214</td>
+                        <td>0.0019</td>
+                        <td>2025-02-21 14:23:07</td>
+                    </tr>
+                    <tr>
+                        <td class="negative">-0.00140000</td>
+                        <td>0.0000</td>
+                        <td>2025-02-17 15:40:38</td>
+                    </tr>
+                    <tr>
+                        <td class="positive">0.00147722</td>
+                        <td>0.0014</td>
+                        <td>2025-02-17 15:33:57</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <button class="toggle-mode" onclick="toggleMode()">☀️</button>
+
+    <div class="bottom-nav">
+        <button onclick="window.location.href='index.html'">
+            <img src="/assets/icons/home.png" alt="Home">
+            Home
+        </button>
+        <button onclick="window.location.href='market.html'">
+            <img src="/assets/icons/bull-market.png" alt="Market">
+            Market
+        </button>
+        <button onclick="window.location.href='transactions.html'">
+            <img src="/assets/icons/invoice.png" alt="Transactions">
+            Transact
+        </button>
+        <button onclick="window.location.href='balance.html'">
+            <img src="/assets/icons/money.png" alt="Balance">
+            Balance
+        </button>
+        <button onclick="window.location.href='profile.html'">
+            <img src="/assets/icons/user.png" alt="Profile">
+            Profile
+        </button>
+    </div>
+
+    <script>
+        let showBalance = true;
+        let currentTheme = localStorage.getItem('theme') || 'dark';
+        const coins = ["BTC/USDT", "ETH/USDT", "BNB/USDT", "SOL/USDT", "XRP/USDT", "DOGE/USDT", "ADA/USDT", "DOT/USDT"];
+        const assetRecords = {
+            "BTC/USDT": [{
+                quantity: -0.00310000,
+                balance: 0.0000,
+                time: "2025-06-11 13:07:26"
+            }, {
+                quantity: 0.00300235,
+                balance: 0.0031,
+                time: "2025-02-22 15:32:39"
+            }, {
+                quantity: -0.00180000,
+                balance: 0.0000,
+                time: "2025-02-21 14:39:44"
+            }, {
+                quantity: 0.00180000,
+                balance: 0.0018,
+                time: "2025-02-21 14:31:10"
+            }, {
+                quantity: -0.00180000,
+                balance: 0.0001,
+                time: "2025-02-21 14:31:10"
+            }, {
+                quantity: 0.00191214,
+                balance: 0.0019,
+                time: "2025-02-21 14:23:07"
+            }, {
+                quantity: -0.00140000,
+                balance: 0.0000,
+                time: "2025-02-17 15:40:38"
+            }, {
+                quantity: 0.00147722,
+                balance: 0.0014,
+                time: "2025-02-17 15:33:57"
+            }],
+            "ETH/USDT": [{
+                quantity: 1.25000000,
+                balance: 1.2500,
+                time: "2025-05-15 16:15:22"
+            }, {
+                quantity: -0.50000000,
+                balance: 0.7500,
+                time: "2025-05-14 14:23:07"
+            }, {
+                quantity: 0.75000000,
+                balance: 1.2500,
+                time: "2025-05-14 13:07:26"
+            }]
+        };
+
+        // Initialize theme
+        function initTheme() {
+            if (currentTheme === 'light') {
+                document.body.classList.add('light-mode');
+            }
+        }
+
+        // Toggle balance visibility
+        function toggleBalance() {
+            const el = document.getElementById('balance-display');
+            showBalance = !showBalance;
+            el.textContent = showBalance ? "$12,530.22" : "****";
+        }
+
+        // Toggle light/dark mode
+        function toggleMode() {
+            document.body.classList.toggle('light-mode');
+            currentTheme = document.body.classList.contains('light-mode') ? 'light' : 'dark';
+            localStorage.setItem('theme', currentTheme);
+        }
+
+        // Open modal with asset records
+        function openAssetModal(asset) {
+            const [coin] = asset.split('/');
+            const modal = document.getElementById('asset-modal');
+            const available = getRandomAmount();
+            const onHold = getRandomAmount();
+            const estimate = getRandomEstimate();
+
+            document.getElementById('modal-asset-name').textContent = coin;
+            document.getElementById('modal-available').textContent = available;
+            document.getElementById('modal-onhold').textContent = onHold;
+            document.getElementById('modal-usd-estimate').textContent = `≈ ${estimate}`;
+
+            // Populate records table
+            const tbody = document.getElementById('asset-records-body');
+            tbody.innerHTML = '';
+
+            const records = assetRecords[asset] || [];
+            records.forEach(record => {
+                const row = document.createElement('tr');
+                const quantityClass = record.quantity < 0 ? 'negative' : 'positive';
+
+                row.innerHTML = `
+                    <td class="${quantityClass}">${record.quantity.toFixed(8)}</td>
+                    <td>${record.balance.toFixed(4)}</td>
+                    <td>${record.time}</td>
+                `;
+                tbody.appendChild(row);
+            });
+
+            modal.style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        }
+
+        // Close modal
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        // Generate random amounts
+        function getRandomAmount() {
+            return (Math.random() * 10).toFixed(4);
+        }
+
+        function getRandomEstimate() {
+            return "$" + (Math.random() * 2000).toFixed(2);
+        }
+
+        // Render wallet list
+        function renderWallets() {
+            let html = "";
+            coins.forEach(coin => {
+                const available = getRandomAmount();
+                const onHold = getRandomAmount();
+                const estimate = getRandomEstimate();
+                html += `
+                    <div class="wallet-item" onclick="openAssetModal('${coin}')">
+                        <h4>${coin}</h4>
+                        <div class="wallet-columns">
+                            <span>Avail: ${available}</span>
+                            <span>Hold: ${onHold}</span>
+                            <span class="estimate">${estimate}</span>
+                        </div>
+                    </div>`;
+            });
+            document.getElementById("wallet-list").innerHTML = html;
+        }
+
+        // Close modal when clicking outside content
+        document.getElementById('asset-modal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal('asset-modal');
+            }
+        });
+
+        // Close modal with Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeModal('asset-modal');
+            }
+        });
+
+        // Initialize
+        initTheme();
+        renderWallets();
+        setInterval(renderWallets, 10000);
+    </script>
+</body>
+
+</html>
